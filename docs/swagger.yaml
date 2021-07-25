@@ -148,6 +148,33 @@ paths:
       summary: User register, make sure email and password is unique
       tags:
       - Auth
+  /api/v1/user:
+    get:
+      consumes:
+      - application/json
+      description: all field should filled
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+      summary: get User authentication, this will get the jwt cookie
+      tags:
+      - Auth
   /this-is-our-new-api:
     post:
       consumes:

@@ -4,6 +4,7 @@ import (
 	"github.com/Fly-Away/go-stock/database"
 	"github.com/Fly-Away/go-stock/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 // @title Fiber Example API
@@ -19,7 +20,9 @@ import (
 func main() {
 	database.Connect()
 	app := fiber.New()
-
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
 	routes.Setup(app)
 
 	app.Listen(":3000")

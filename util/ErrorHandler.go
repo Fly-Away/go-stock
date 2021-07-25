@@ -13,3 +13,12 @@ func ErrorResponse(c *fiber.Ctx, msg string, errorCode interface{}) error {
 		Url: c.Route().Path,
 	})
 }
+
+func UnAuthorizedResponse(c *fiber.Ctx, msg string, errorCode interface{}) error {
+	return c.Status(fiber.StatusUnauthorized).JSON(models.ErrorResponse{
+		Success: false,
+		Message: msg,
+		ErrorCode: errorCode,
+		Url: c.Route().Path,
+	})
+}

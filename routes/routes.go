@@ -21,6 +21,7 @@ func Setup(app *fiber.App) {
 	v1 := mainApi.Group("/v1")
 	v1.Post("/register", controllers.Register)
 	v1.Post("/login", controllers.Login)
+	v1.Get("/user", controllers.AuthenticateUser)
 	// End of Auth Endpoint
 
 	app.Get("/", controllers.HelloWorld)

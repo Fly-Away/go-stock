@@ -39,17 +39,17 @@ func Register(user authDto.UserRegisterRequest) (userResp *response.UserResponse
 	return &userResponse, nil, nil
 }
 
-func Login(user authDto.UserLoginRequest) (userResp *response.UserResponse, error error, errorCode interface{}) {
+func Login(user authDto.UserLoginRequest) (userResp *response.UserResponse, error error, errorCode interface{}, generatedToken *string) {
 	var userDomain domain.User
 
 	database.DB.Where("email = ?", user.Email).First(&userDomain)
 
 	if userDomain.ID == 0 {
-		return nil, errors.New("user not found"), 2005
+		return nil, errors.New("user not found"), 2005, nil
 	}
 
 	if err := bcrypt.CompareHashAndPassword(userDomain.Password, []byte(user.Password)); err != nil {
-		return nil, errors.New("wrong password"), 2006
+		return nil, errors.New("wrong password"), 2006, nil
 	}
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
@@ -59,12 +59,39 @@ func Login(user authDto.UserLoginRequest) (userResp *response.UserResponse, erro
 
 	token, err := claims.SignedString([]byte("secret"))
 	if err != nil {
-		return nil, errors.New(err.Error()), 2007
+		return nil, errors.New(err.Error()), 2007, nil
 	}
 
 	userResponse := response.UserResponse{}
-	if err := copier.Copy(&userResponse, &userDomain); err != nil {
-		return nil, errors.New(err.Error()), 2008
+	if errCopy := copier.Copy(&userResponse, &userDomain); errCopy != nil {
+		return nil, errors.New(errCopy.Error()), 2008, nil
+	}
+
+	return &userResponse, nil, nil, &token
+}
+
+type Claims struct {
+	jwt.StandardClaims
+}
+
+func AuthenticateUser(cookie string) (userResp *response.UserResponse, customError error, errorCode interface{}) {
+	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+
+	if err != nil || !token.Valid {
+		return nil, err, 2009
+	}
+
+	claims := token.Claims.(*Claims)
+
+	userDomain := domain.User{}
+
+	database.DB.Where("id = ?", claims.Issuer).First(&userDomain)
+
+	userResponse := response.UserResponse{}
+	if errCopy := copier.Copy(&userResponse, &userDomain); errCopy != nil {
+		return nil, errors.New(errCopy.Error()), 2010
 	}
 
 	return &userResponse, nil, nil
