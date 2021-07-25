@@ -5,7 +5,7 @@ import (
 )
 
 // HelloWorld godoc
-// @Summary test
+// @Summary Test
 // @Description testttt
 // @Accept  json
 // @Produce  json
@@ -23,11 +23,11 @@ func HelloWorld(c *fiber.Ctx) error {
 
 // PostHelloWorld godoc
 // @Summary This is post example
-// @Description Just another test
+// @Description Just another Test
 // @Accept  json
 // @Produce  json
 // @Tags Item
-// @Param item body Item true "Post Hello xx"
+// @Param item body Item true "Post Hello xxiiii"
 // @Success 200 {object} Item
 // @Failure 400 {object} HTTPError
 // @Failure 404 {object} HTTPError

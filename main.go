@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Fly-Away/go-stock/database"
 	"github.com/Fly-Away/go-stock/routes"
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,6 +17,7 @@ import (
 // @host localhost:3000
 // @BasePath /
 func main() {
+	database.Connect()
 	app := fiber.New()
 
 	routes.Setup(app)

@@ -41,7 +41,7 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "test",
+                "summary": "Test",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -70,9 +70,113 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/login": {
+            "post": {
+                "description": "all field should filled",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User login, just login",
+                "parameters": [
+                    {
+                        "description": "minimal 8 characters",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authDto.UserLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SuccessResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "description": "all field should filled",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User register, make sure email and password is unique",
+                "parameters": [
+                    {
+                        "description": "Post Hello yyy",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authDto.UserRegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SuccessResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/this-is-our-new-api": {
             "post": {
-                "description": "Just another test",
+                "description": "Just another Test",
                 "consumes": [
                     "application/json"
                 ],
@@ -85,7 +189,7 @@ var doc = `{
                 "summary": "This is post example",
                 "parameters": [
                     {
-                        "description": "Post Hello xx",
+                        "description": "Post Hello xxiiii",
                         "name": "item",
                         "in": "body",
                         "required": true,
@@ -124,6 +228,37 @@ var doc = `{
         }
     },
     "definitions": {
+        "authDto.UserLoginRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "authDto.UserRegisterRequest": {
+            "type": "object",
+            "properties": {
+                "confirm_password": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.HTTPError": {
             "type": "object",
             "properties": {
@@ -141,6 +276,20 @@ var doc = `{
                 "id": {
                     "type": "string",
                     "example": "id something"
+                }
+            }
+        },
+        "models.SuccessResponseDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "object"
+                },
+                "success": {
+                    "type": "boolean"
                 }
             }
         }

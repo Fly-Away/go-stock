@@ -1,5 +1,25 @@
 basePath: /
 definitions:
+  authDto.UserLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  authDto.UserRegisterRequest:
+    properties:
+      confirm_password:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+    type: object
   controllers.HTTPError:
     properties:
       message:
@@ -12,6 +32,15 @@ definitions:
       id:
         example: id something
         type: string
+    type: object
+  models.SuccessResponseDto:
+    properties:
+      data:
+        type: object
+      message:
+        type: object
+      success:
+        type: boolean
     type: object
 host: localhost:3000
 info:
@@ -50,14 +79,82 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/controllers.HTTPError'
-      summary: test
+      summary: Test
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: all field should filled
+      parameters:
+      - description: minimal 8 characters
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/authDto.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+      summary: User login, just login
+      tags:
+      - Auth
+  /api/v1/register:
+    post:
+      consumes:
+      - application/json
+      description: all field should filled
+      parameters:
+      - description: Post Hello yyy
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/authDto.UserRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+      summary: User register, make sure email and password is unique
+      tags:
+      - Auth
   /this-is-our-new-api:
     post:
       consumes:
       - application/json
-      description: Just another test
+      description: Just another Test
       parameters:
-      - description: Post Hello xx
+      - description: Post Hello xxiiii
         in: body
         name: item
         required: true
