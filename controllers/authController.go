@@ -115,3 +115,31 @@ func AuthenticateUser(c *fiber.Ctx) error {
 		Data:    user,
 	})
 }
+
+// Logout godoc
+// @Summary set jwt cookie to expire right now
+// @Description all field should filled
+// @Accept  json
+// @Produce  json
+// @Tags Auth
+// @Success 200 {object} models.SuccessResponseDto{}
+// @Failure 400 {object} HTTPError
+// @Failure 404 {object} HTTPError
+// @Failure 500 {object} HTTPError
+// @Router /api/v1/logout [get]
+func Logout(c *fiber.Ctx) error {
+	cookies := fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookies)
+
+	return c.JSON(models.SuccessResponseDto{
+		Success: true,
+		Message: "Logout Success",
+		Data:    nil,
+	})
+}
