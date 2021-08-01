@@ -75,7 +75,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/authDto.UserLoginRequest"
+                            "$ref": "#/definitions/domain.UserLoginRequest"
                         }
                     }
                 ],
@@ -168,7 +168,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/authDto.UserRegisterRequest"
+                            "$ref": "#/definitions/domain.UserRegisterRequest"
                         }
                     }
                 ],
@@ -295,37 +295,6 @@
         }
     },
     "definitions": {
-        "authDto.UserLoginRequest": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "authDto.UserRegisterRequest": {
-            "type": "object",
-            "properties": {
-                "confirm_password": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
         "controllers.HTTPError": {
             "type": "object",
             "properties": {
@@ -343,6 +312,37 @@
                 "id": {
                     "type": "string",
                     "example": "id something"
+                }
+            }
+        },
+        "domain.UserLoginRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.UserRegisterRequest": {
+            "type": "object",
+            "properties": {
+                "confirm_password": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         },

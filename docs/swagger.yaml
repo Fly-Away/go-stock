@@ -1,25 +1,5 @@
 basePath: /
 definitions:
-  authDto.UserLoginRequest:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    type: object
-  authDto.UserRegisterRequest:
-    properties:
-      confirm_password:
-        type: string
-      email:
-        type: string
-      first_name:
-        type: string
-      last_name:
-        type: string
-      password:
-        type: string
-    type: object
   controllers.HTTPError:
     properties:
       message:
@@ -31,6 +11,26 @@ definitions:
     properties:
       id:
         example: id something
+        type: string
+    type: object
+  domain.UserLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  domain.UserRegisterRequest:
+    properties:
+      confirm_password:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
         type: string
     type: object
   models.SuccessResponseDto:
@@ -91,7 +91,7 @@ paths:
         name: item
         required: true
         schema:
-          $ref: '#/definitions/authDto.UserLoginRequest'
+          $ref: '#/definitions/domain.UserLoginRequest'
       produces:
       - application/json
       responses:
@@ -152,7 +152,7 @@ paths:
         name: item
         required: true
         schema:
-          $ref: '#/definitions/authDto.UserRegisterRequest'
+          $ref: '#/definitions/domain.UserRegisterRequest'
       produces:
       - application/json
       responses:

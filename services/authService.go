@@ -4,8 +4,6 @@ import (
 	"errors"
 	"github.com/Fly-Away/go-stock/database"
 	"github.com/Fly-Away/go-stock/models/domain"
-	"github.com/Fly-Away/go-stock/models/dto/request/authDto"
-	"github.com/Fly-Away/go-stock/models/dto/response"
 	"github.com/golang-jwt/jwt"
 	"github.com/jinzhu/copier"
 	"golang.org/x/crypto/bcrypt"
@@ -13,9 +11,9 @@ import (
 	"time"
 )
 
-func Register(user authDto.UserRegisterRequest) (userResp *response.UserResponse, error error, errorCode interface{}) {
+func Register(user domain.UserRegisterRequest) (userResp *domain.UserResponse, error error, errorCode interface{}) {
 	if user.Password != user.ConfirmPassword {
-		return &response.UserResponse{}, errors.New("password not match"), 2001
+		return &domain.UserResponse{}, errors.New("password not match"), 2001
 	}
 
 	encryptedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
@@ -31,7 +29,7 @@ func Register(user authDto.UserRegisterRequest) (userResp *response.UserResponse
 		return nil, errors.New(err.Error.Error()), 2002
 	}
 
-	userResponse := response.UserResponse{}
+	userResponse := domain.UserResponse{}
 	if err := copier.Copy(&userResponse, &userDomain); err != nil {
 		return nil, errors.New("failed to copy User Response"), 2003
 	}
@@ -39,7 +37,7 @@ func Register(user authDto.UserRegisterRequest) (userResp *response.UserResponse
 	return &userResponse, nil, nil
 }
 
-func Login(user authDto.UserLoginRequest) (userResp *response.UserResponse, error error, errorCode interface{}, generatedToken *string) {
+func Login(user domain.UserLoginRequest) (userResp *domain.UserResponse, error error, errorCode interface{}, generatedToken *string) {
 	var userDomain domain.User
 
 	database.DB.Where("email = ?", user.Email).First(&userDomain)
@@ -62,7 +60,7 @@ func Login(user authDto.UserLoginRequest) (userResp *response.UserResponse, erro
 		return nil, errors.New(err.Error()), 2007, nil
 	}
 
-	userResponse := response.UserResponse{}
+	userResponse := domain.UserResponse{}
 	if errCopy := copier.Copy(&userResponse, &userDomain); errCopy != nil {
 		return nil, errors.New(errCopy.Error()), 2008, nil
 	}
@@ -74,7 +72,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func AuthenticateUser(cookie string) (userResp *response.UserResponse, customError error, errorCode interface{}) {
+func AuthenticateUser(cookie string) (userResp *domain.UserResponse, customError error, errorCode interface{}) {
 	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret"), nil
 	})
@@ -89,7 +87,7 @@ func AuthenticateUser(cookie string) (userResp *response.UserResponse, customErr
 
 	database.DB.Where("id = ?", claims.Issuer).First(&userDomain)
 
-	userResponse := response.UserResponse{}
+	userResponse := domain.UserResponse{}
 	if errCopy := copier.Copy(&userResponse, &userDomain); errCopy != nil {
 		return nil, errors.New(errCopy.Error()), 2010
 	}

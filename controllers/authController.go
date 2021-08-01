@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/Fly-Away/go-stock/models"
-	"github.com/Fly-Away/go-stock/models/dto/request/authDto"
+	"github.com/Fly-Away/go-stock/models/domain"
 	"github.com/Fly-Away/go-stock/services"
 	"github.com/Fly-Away/go-stock/util"
 	"github.com/gofiber/fiber/v2"
@@ -20,14 +20,14 @@ type Claims struct {
 // @Accept  json
 // @Produce  json
 // @Tags Auth
-// @Param item body authDto.UserRegisterRequest{} true "Post Hello yyy"
+// @Param item body domain.UserRegisterRequest{} true "Post Hello yyy"
 // @Success 200 {object} models.SuccessResponseDto{}
 // @Failure 400 {object} HTTPError
 // @Failure 404 {object} HTTPError
 // @Failure 500 {object} HTTPError
 // @Router /api/v1/register [post]
 func Register(c *fiber.Ctx) error {
-	user := authDto.UserRegisterRequest{}
+	user := domain.UserRegisterRequest{}
 
 	if err := c.BodyParser(&user); err != nil {
 		return util.ErrorResponse(c, err.Error(), 1001)
@@ -54,14 +54,14 @@ func Register(c *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Tags Auth
-// @Param item body authDto.UserLoginRequest{} true "minimal 8 characters"
+// @Param item body domain.UserLoginRequest{} true "minimal 8 characters"
 // @Success 200 {object} models.SuccessResponseDto{}
 // @Failure 400 {object} HTTPError
 // @Failure 404 {object} HTTPError
 // @Failure 500 {object} HTTPError
 // @Router /api/v1/login [post]
 func Login(c *fiber.Ctx) error {
-	userLoginRequest := authDto.UserLoginRequest{}
+	userLoginRequest := domain.UserLoginRequest{}
 
 	if err := c.BodyParser(&userLoginRequest); err != nil {
 		return util.ErrorResponse(c, err.Error(), 1002)
