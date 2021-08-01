@@ -202,6 +202,33 @@ paths:
       summary: get User authentication, this will get the jwt cookie
       tags:
       - Auth
+  /api/v1/user-module/view-all:
+    get:
+      consumes:
+      - application/json
+      description: no param needed
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.HTTPError'
+      summary: get all user from database
+      tags:
+      - user-module
   /this-is-our-new-api:
     post:
       consumes:

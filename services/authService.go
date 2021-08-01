@@ -4,11 +4,11 @@ import (
 	"errors"
 	"github.com/Fly-Away/go-stock/database"
 	"github.com/Fly-Away/go-stock/models/domain"
+	"github.com/Fly-Away/go-stock/util"
 	"github.com/golang-jwt/jwt"
 	"github.com/jinzhu/copier"
 	"golang.org/x/crypto/bcrypt"
 	"strconv"
-	"time"
 )
 
 func Register(user domain.UserRegisterRequest) (userResp *domain.UserResponse, error error, errorCode interface{}) {
@@ -50,12 +50,7 @@ func Login(user domain.UserLoginRequest) (userResp *domain.UserResponse, error e
 		return nil, errors.New("wrong password"), 2006, nil
 	}
 
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer: strconv.Itoa(int(userDomain.ID)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // 1 day
-	})
-
-	token, err := claims.SignedString([]byte("secret"))
+	token, err := util.GenerateJwt(strconv.Itoa(int(userDomain.ID)))
 	if err != nil {
 		return nil, errors.New(err.Error()), 2007, nil
 	}
@@ -73,19 +68,11 @@ type Claims struct {
 }
 
 func AuthenticateUser(cookie string) (userResp *domain.UserResponse, customError error, errorCode interface{}) {
-	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("secret"), nil
-	})
-
-	if err != nil || !token.Valid {
-		return nil, err, 2009
-	}
-
-	claims := token.Claims.(*Claims)
+	id, _ := util.ParseJwt(cookie)
 
 	userDomain := domain.User{}
 
-	database.DB.Where("id = ?", claims.Issuer).First(&userDomain)
+	database.DB.Where("id = ?", id).First(&userDomain)
 
 	userResponse := domain.UserResponse{}
 	if errCopy := copier.Copy(&userResponse, &userDomain); errCopy != nil {
